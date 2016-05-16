@@ -3,13 +3,14 @@ set search_path [concat $search_path .. ../clib]
 set target_library class.db
 set link_library   class.db
 
-# set name c_lfsr
-# set wild *
+set name rtr_top
+set wild *
 # set c_files   [glob -path ../clib/ $wild$name$wild]
+set rtr_files   [glob -path ../ $wild$name$wild]
 
-set c_files   [glob -path ../clib/ *]
-# set c_files   []
-set rtr_files [glob -path ../ rtr*]
+# set c_files   [glob -path ../clib/ *]
+set c_files   []
+# set rtr_files [glob -path ../ rtr*]
 # set rtr_files []
 set all_files [concat $c_files $rtr_files]
 

@@ -29,6 +29,8 @@
 // perform binary operation across diagonals of a matrix
 //==============================================================================
 
+`include "c_constants.v"
+
 module c_diag_op
   (data_in, data_out);
    

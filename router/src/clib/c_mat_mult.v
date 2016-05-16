@@ -52,7 +52,7 @@ module c_mat_mult
    input [0:dim2_width*dim3_width-1] input_b;
    
    output [0:dim1_width*dim3_width-1] result;
-   wire [0:dim1_width*dim3_width-1] result;
+   // wire [0:dim1_width*dim3_width-1] result;
    
    generate
       

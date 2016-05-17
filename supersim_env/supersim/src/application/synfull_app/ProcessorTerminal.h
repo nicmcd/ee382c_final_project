@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef APPLICATION_SIMPLEMEM_PROCESSORTERMINAL_H_
-#define APPLICATION_SIMPLEMEM_PROCESSORTERMINAL_H_
+#ifndef APPLICATION_synfull_app_PROCESSORTERMINAL_H_
+#define APPLICATION_synfull_app_PROCESSORTERMINAL_H_
 
 #include <json/json.h>
 #include <prim/prim.h>
@@ -27,7 +27,7 @@
 
 class Application;
 
-namespace SimpleMem {
+namespace Synfull_app {
 
 class ProcessorTerminal : public Terminal {
  public:
@@ -59,6 +59,6 @@ class ProcessorTerminal : public Terminal {
   eState fsm_;
 };
 
-}  // namespace SimpleMem
+}  // namespace synfull_app
 
-#endif  // APPLICATION_SIMPLEMEM_PROCESSORTERMINAL_H_
+#endif  // APPLICATION_synfull_app_PROCESSORTERMINAL_H_

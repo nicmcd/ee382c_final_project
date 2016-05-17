@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "application/simplemem/MemoryTerminal.h"
+#include "application/synfull_app/MemoryTerminal.h"
 
 #include <cassert>
 #include <cstring>
@@ -22,10 +22,10 @@
 #include "types/Message.h"
 #include "types/Packet.h"
 #include "types/Flit.h"
-#include "application/simplemem/Application.h"
-#include "application/simplemem/MemoryOp.h"
+#include "application/synfull_app/Application.h"
+#include "application/synfull_app/MemoryOp.h"
 
-namespace SimpleMem {
+namespace Synfull_app {
 
 MemoryTerminal::MemoryTerminal(
     const std::string& _name, const Component* _parent, u32 _id,
@@ -171,4 +171,4 @@ void MemoryTerminal::sendMemoryResponse() {
   }
 }
 
-}  // namespace SimpleMem
+}  // namespace synfull_app

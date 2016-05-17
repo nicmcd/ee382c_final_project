@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef APPLICATION_SIMPLEMEM_APPLICATION_H_
-#define APPLICATION_SIMPLEMEM_APPLICATION_H_
+#ifndef APPLICATION_SYNFULL_APPLICATION_H_
+#define APPLICATION_SYNFULL_APPLICATION_H_
 
 #include <json/json.h>
 #include <prim/prim.h>
@@ -56,6 +56,6 @@ class Application : public ::Application {
   u32 remainingProcessors_;
 };
 
-}  // namespace SimpleMem
+}  // namespace SYNFULL
 
-#endif  // APPLICATION_SIMPLEMEM_APPLICATION_H_
+#endif  // APPLICATION_SYNFULL_APPLICATION_H_

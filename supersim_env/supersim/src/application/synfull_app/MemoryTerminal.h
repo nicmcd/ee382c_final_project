@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef APPLICATION_SIMPLEMEM_MEMORYTERMINAL_H_
-#define APPLICATION_SIMPLEMEM_MEMORYTERMINAL_H_
+#ifndef APPLICATION_SYNFULL_MEMORYTERMINAL_H_
+#define APPLICATION_SYNFULL_MEMORYTERMINAL_H_
 
 #include <json/json.h>
 #include <prim/prim.h>
@@ -28,7 +28,7 @@
 
 class Application;
 
-namespace SimpleMem {
+namespace Synfull_App {
 
 class MemoryTerminal : public Terminal {
  public:
@@ -55,6 +55,6 @@ class MemoryTerminal : public Terminal {
   eState fsm_;
 };
 
-}  // namespace SimpleMem
+}  // namespace SYNFULL
 
-#endif  // APPLICATION_SIMPLEMEM_MEMORYTERMINAL_H_
+#endif  // APPLICATION_SYNFULL_MEMORYTERMINAL_H_

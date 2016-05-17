@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "application/simplemem/ProcessorTerminal.h"
+#include "application/synfull_app/ProcessorTerminal.h"
 
 #include <cassert>
 
-#include "application/simplemem/Application.h"
-#include "application/simplemem/MemoryOp.h"
+#include "application/synfull_app/Application.h"
+#include "application/synfull_app/MemoryOp.h"
 #include "event/Simulator.h"
 #include "types/Message.h"
 #include "types/Packet.h"
 #include "types/Flit.h"
 
-namespace SimpleMem {
+namespace Synfull_app {
 
 ProcessorTerminal::ProcessorTerminal(
     const std::string& _name, const Component* _parent, u32 _id,
@@ -168,4 +168,4 @@ void ProcessorTerminal::startNextMemoryAccess() {
   sendMessage(message, memoryTerminalId);
 }
 
-}  // namespace SimpleMem
+}  // namespace synfull_app

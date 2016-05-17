@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef APPLICATION_SYNFULL_APPLICATION_H_
-#define APPLICATION_SYNFULL_APPLICATION_H_
+#ifndef APPLICATION_SYNFULL_APP_APPLICATION_H_
+#define APPLICATION_SYNFULL_APP_APPLICATION_H_
 
 #include <json/json.h>
 #include <prim/prim.h>
@@ -33,29 +33,21 @@ class Application : public ::Application {
   Application(const std::string& _name, const Component* _parent,
               MetadataHandler* _metadataHandler, Json::Value _settings);
   ~Application();
-  f64 percentComplete() const override;
   u32 numVcs() const;
-  u32 totalMemory() const;
-  u32 memorySlice() const;
-  u32 blockSize() const;
   u32 bytesPerFlit() const;
   u32 headerOverhead() const;
   u32 maxPacketSize() const;
-  void processorComplete(u32 _id);
   void processEvent(void* _event, s32 _type) override;
+  f64 percentComplete() const override;
+
 
  private:
   u32 numVcs_;
-  u32 totalMemory_;
-  u32 memorySlice_;
-  u32 blockSize_;
   u32 bytesPerFlit_;
   u32 headerOverhead_;
   u32 maxPacketSize_;
-
-  u32 remainingProcessors_;
 };
 
-}  // namespace SYNFULL
+}  // namespace Synfull_App
 
-#endif  // APPLICATION_SYNFULL_APPLICATION_H_
+#endif  // APPLICATION_SYNFULL_APP_APPLICATION_H_

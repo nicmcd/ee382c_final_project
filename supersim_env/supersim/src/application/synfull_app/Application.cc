@@ -19,10 +19,12 @@
 
 #include <vector>
 
-#include "application/synfull_app/MemoryTerminal.h"
-#include "application/synfull_app/ProcessorTerminal.h"
+#include "application/synfull_app/SynfullTerminal.h"
 #include "event/Simulator.h"
 #include "network/Network.h"
+
+// TODO(rprabala): make this the correct path
+// #include "NetworkInterface.h"
 
 #define ISPOW2INT(X) (((X) != 0) && !((X) & ((X) - 1)))  /*glibc trick*/
 #define ISPOW2(X) (ISPOW2INT(X) == 0 ? false : true)
@@ -37,11 +39,6 @@ Application::Application(const std::string& _name, const Component* _parent,
   assert(numVcs_ > 0);
 
   // check the memory system setup
-  memorySlice_ = _settings["memory_slice"].asUInt();
-  totalMemory_ = memorySlice_ * (numTerminals() / 2);
-  blockSize_ = _settings["block_size"].asUInt();
-  assert(ISPOW2(blockSize_));
-  assert((memorySlice_ % blockSize_) == 0);
 
   bytesPerFlit_ = _settings["bytes_per_flit"].asUInt();
   assert(bytesPerFlit_ > 0);
@@ -49,61 +46,26 @@ Application::Application(const std::string& _name, const Component* _parent,
   maxPacketSize_ = _settings["max_packet_size"].asUInt();
 
   // create terminals
-  remainingProcessors_ = 0;
   for (u32 t = 0; t < numTerminals(); t++) {
     std::vector<u32> address;
     gSim->getNetwork()->translateIdToAddress(t, &address);
-    std::string idStr = std::to_string(t / 2);
-    if ((t & 0x1) == 0) {
-      // even terminals are memory terminals
-      std::string tname = "MemoryTerminal_" + idStr;
-      MemoryTerminal* terminal = new MemoryTerminal(
-          tname, this, t, address, memorySlice_, this,
-          _settings["memory_terminal"]);
-      setTerminal(t, terminal);
-    } else {
-      // odd terminals are processor terminals
-      std::string tname = "ProcessorTerminal_" + idStr;
-      ProcessorTerminal* terminal = new ProcessorTerminal(
-          tname, this, t, address, this, _settings["processor_terminal"]);
-      setTerminal(t, terminal);
-      remainingProcessors_++;
-    }
+    std::string idStr = std::to_string(t);
+    std::string tname = "SynfullTerminal_" + idStr;
+    SynfullTerminal* terminal = new SynfullTerminal(
+        tname, this, t, address, this, _settings["synfull_terminal"]);
+    setTerminal(t, terminal);
   }
 
   // this application always wants monitor
   addEvent(0, 0, nullptr, 0);
+  gSim->startMonitoring();
 }
 
 Application::~Application() {}
 
-f64 Application::percentComplete() const {
-  f64 percentSum = 0.0;
-  u32 processorCount = 0;
-  // odd terminals are processor terminals
-  for (u32 idx = 1; idx < numTerminals(); idx += 2) {
-    ProcessorTerminal* t =
-        reinterpret_cast<ProcessorTerminal*>(getTerminal(idx));
-    percentSum += t->percentComplete();
-    processorCount++;
-  }
-  return percentSum / processorCount;
-}
 
 u32 Application::numVcs() const {
   return numVcs_;
-}
-
-u32 Application::totalMemory() const {
-  return totalMemory_;
-}
-
-u32 Application::memorySlice() const {
-  return memorySlice_;
-}
-
-u32 Application::blockSize() const {
-  return blockSize_;
 }
 
 u32 Application::bytesPerFlit() const {
@@ -118,17 +80,24 @@ u32 Application::maxPacketSize() const {
   return maxPacketSize_;
 }
 
-void Application::processorComplete(u32 _id) {
-  remainingProcessors_--;
-  if (remainingProcessors_ == 0) {
-    dbgprintf("Processing complete");
-    gSim->endMonitoring();
-  }
+f64 Application::percentComplete() const {
+  return 0.5;
 }
+// TODO(rprabala): call gSim->endMonitoring somewhere
 
 void Application::processEvent(void* _event, s32 _type) {
   dbgprintf("synfull_app application starting\n");
-  gSim->startMonitoring();
+  // TODO(rprabala): read from queue and put here
+  // bool done = NetworkInterface::Step();
+  // get packets from Synfull and send them to
+  // for every packet in the Synfull queue:
+  //    get source
+  //    create message
+  //    get terminal
+  //    call terminal->send
+  // end
+  // if (!done)
+  //   addEvent(gSim->FutureCycle(1), 0, nullptr, 0);
 }
 
-}  // namespace synfull_app
+}  // namespace Synfull_App

@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef APPLICATION_SYNFULL_MEMORYTERMINAL_H_
-#define APPLICATION_SYNFULL_MEMORYTERMINAL_H_
+#ifndef APPLICATION_SYNFULL_APP_SYNFULLTERMINAL_H_
+#define APPLICATION_SYNFULL_APP_SYNFULLTERMINAL_H_
 
 #include <json/json.h>
 #include <prim/prim.h>
@@ -30,12 +30,12 @@ class Application;
 
 namespace Synfull_App {
 
-class MemoryTerminal : public Terminal {
+class SynfullTerminal : public Terminal {
  public:
-  MemoryTerminal(const std::string& _name, const Component* _parent,
-                 u32 _id, const std::vector<u32>& _address, u32 _memorySlice,
+  SynfullTerminal(const std::string& _name, const Component* _parent,
+                 u32 _id, const std::vector<u32>& _address,
                  ::Application* _app, Json::Value _settings);
-  ~MemoryTerminal();
+  ~SynfullTerminal();
   void processEvent(void* _event, s32 _type) override;
   void handleMessage(Message* _message) override;
   void messageEnteredInterface(Message* _message) override;
@@ -44,17 +44,14 @@ class MemoryTerminal : public Terminal {
  private:
   enum class eState {kWaiting, kAccessing};
 
-  void startMemoryAccess();
-  void sendMemoryResponse();
+  void addLatency();
 
-  u32 memoryOffset_;
-  u8* memory_;
   u32 latency_;
 
   std::queue<Message*> messages_;
   eState fsm_;
 };
 
-}  // namespace SYNFULL
+}  // namespace Synfull_App
 
-#endif  // APPLICATION_SYNFULL_MEMORYTERMINAL_H_
+#endif  // APPLICATION_SYNFULL_APP_SYNFULLTERMINAL_H_

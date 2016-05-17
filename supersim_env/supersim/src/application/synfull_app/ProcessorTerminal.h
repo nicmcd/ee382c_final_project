@@ -27,7 +27,7 @@
 
 class Application;
 
-namespace Synfull_app {
+namespace Synfull_App {
 
 class ProcessorTerminal : public Terminal {
  public:

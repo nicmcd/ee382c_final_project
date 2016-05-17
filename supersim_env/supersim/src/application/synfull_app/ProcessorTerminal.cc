@@ -24,7 +24,7 @@
 #include "types/Packet.h"
 #include "types/Flit.h"
 
-namespace Synfull_app {
+namespace Synfull_App {
 
 ProcessorTerminal::ProcessorTerminal(
     const std::string& _name, const Component* _parent, u32 _id,

@@ -25,6 +25,7 @@
 
 #include "event/Component.h"
 #include "application/Terminal.h"
+#include "../../Synfull/src/netstream/messages.h"
 
 class Application;
 
@@ -40,6 +41,7 @@ class SynfullTerminal : public Terminal {
   void handleMessage(Message* _message) override;
   void messageEnteredInterface(Message* _message) override;
   void messageExitedNetwork(Message* _message) override;
+  void sendSynfullPacket(InjectMsgReq* msg);
 
  private:
   enum class eState {kWaiting, kAccessing};

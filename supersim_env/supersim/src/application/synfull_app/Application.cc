@@ -18,13 +18,13 @@
 #include <cassert>
 
 #include <vector>
-
+#include <queue>
 #include "application/synfull_app/SynfullTerminal.h"
 #include "event/Simulator.h"
 #include "network/Network.h"
 
 // TODO(rprabala): make this the correct path
-// #include "NetworkInterface.h"
+#include "../../SynFull/NetworkInterface.h"
 
 #define ISPOW2INT(X) (((X) != 0) && !((X) & ((X) - 1)))  /*glibc trick*/
 #define ISPOW2(X) (ISPOW2INT(X) == 0 ? false : true)
@@ -55,7 +55,7 @@ Application::Application(const std::string& _name, const Component* _parent,
         tname, this, t, address, this, _settings["synfull_terminal"]);
     setTerminal(t, terminal);
   }
-
+  finished_ = new std::queue<Message*>();
   // this application always wants monitor
   addEvent(0, 0, nullptr, 0);
   gSim->startMonitoring();
@@ -83,21 +83,18 @@ u32 Application::maxPacketSize() const {
 f64 Application::percentComplete() const {
   return 0.5;
 }
-// TODO(rprabala): call gSim->endMonitoring somewhere
+
+void Application::enqueueMessage(Message *message) {
+  finished_.push(message);
+}
 
 void Application::processEvent(void* _event, s32 _type) {
   dbgprintf("synfull_app application starting\n");
-  // TODO(rprabala): read from queue and put here
   // bool done = NetworkInterface::Step();
-  // get packets from Synfull and send them to
-  // for every packet in the Synfull queue:
-  //    get source
-  //    create message
-  //    get terminal
-  //    call terminal->send
-  // end
   // if (!done)
   //   addEvent(gSim->FutureCycle(1), 0, nullptr, 0);
+  // else
+  //   gSim->endMonitoring();
 }
 
 }  // namespace Synfull_App

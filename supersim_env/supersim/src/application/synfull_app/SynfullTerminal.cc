@@ -48,9 +48,43 @@ void SynfullTerminal::handleMessage(Message* _message) {
   // log the message
   Application* app = reinterpret_cast<Application*>(gSim->getApplication());
   app->getMessageLog()->logMessage(_message);
-
+  app->enqueueMessage(_message);
   // optional: add latency here
   //  startMemoryAccess();
+}
+
+void SynfullTerminal::sendSynfullPacket(InjectMsgReq* msg) {
+  u32 messageLength = msg->size + 4;
+  u32 numPackets = messageLength / maxPacketSize_;
+  if ((messageLength % maxPacketSize_) > 0) {
+    numPackets++;
+  }
+
+  // create the message object
+  Message* message = new Message(numPackets, msg);
+  message->setTransaction(createTransaction());
+
+  // create the packets
+  u32 flitsLeft = messageLength;
+  for (u32 p = 0; p < numPackets; p++) {
+    u32 packetLength = flitsLeft > maxPacketSize_ ?
+        maxPacketSize_ : flitsLeft;
+
+    Packet* packet = new Packet(p, packetLength, message);
+    message->setPacket(p, packet);
+
+    // create flits
+    for (u32 f = 0; f < packetLength; f++) {
+      bool headFlit = f == 0;
+      bool tailFlit = f == (packetLength - 1);
+      Flit* flit = new Flit(f, headFlit, tailFlit, packet);
+      packet->setFlit(f, flit);
+    }
+    flitsLeft -= packetLength;
+  }
+
+  // send the message
+  u32 msgId = sendMessage(message, msg->dest);
 }
 
 void SynfullTerminal::messageEnteredInterface(Message* _message) {

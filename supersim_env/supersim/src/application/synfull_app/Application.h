@@ -20,9 +20,11 @@
 #include <prim/prim.h>
 
 #include <string>
+#include <queue>
 
 #include "event/Component.h"
 #include "application/Application.h"
+#include "types/Message.h"
 
 class MetadataHandler;
 
@@ -39,6 +41,7 @@ class Application : public ::Application {
   u32 maxPacketSize() const;
   void processEvent(void* _event, s32 _type) override;
   f64 percentComplete() const override;
+  void enqueueMessage(Message* message);
 
 
  private:
@@ -46,6 +49,7 @@ class Application : public ::Application {
   u32 bytesPerFlit_;
   u32 headerOverhead_;
   u32 maxPacketSize_;
+  std::queue<Message*> finished_;
 };
 
 }  // namespace Synfull_App

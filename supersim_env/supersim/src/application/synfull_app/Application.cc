@@ -88,13 +88,21 @@ void Application::enqueueMessage(Message *message) {
   finished_.push(message);
 }
 
+Message* Application::dequeueMessage() {
+  return finished_.pop();
+}
+
+u32 Application::remainingMessages() {
+  return finished_.size();
+}
+
 void Application::processEvent(void* _event, s32 _type) {
   dbgprintf("synfull_app application starting\n");
-  // bool done = NetworkInterface::Step();
-  // if (!done)
-  //   addEvent(gSim->FutureCycle(1), 0, nullptr, 0);
-  // else
-  //   gSim->endMonitoring();
+  bool done = NetworkInterface::Step();
+  if (!done)
+    addEvent(gSim->FutureCycle(1), 0, nullptr, 0);
+  else
+    gSim->endMonitoring();
 }
 
 }  // namespace Synfull_App

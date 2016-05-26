@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (c) 2014, Mario Badr
 All rights reserved.
 
@@ -12,7 +12,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 */
 #include "NetworkInterface.h"
 #include <sstream>
-
+#include "event/simulator.h"
 /**
  * Establish this as a server over a socket and wait for the client (TrafficManager)
  * to connect.
@@ -69,7 +69,9 @@ int NetworkInterface::Step() {
 			InjectReqMsg* req = (InjectReqMsg*) msg;
 
 			//Inject the packet into your network simulator here.
-
+  			Application* app = reinterpret_cast<Application*>(gSim->getApplication());
+  			SynfullTerminal *term = reinterpret_cast<SynfullTerminal*>(app->getTerminal(req->source));
+  			term->sendSynfullPacket(req);
 			// acknowledge receipt of packet to TrafficManager
 			InjectResMsg res;
 			*m_channel << res;
@@ -80,10 +82,24 @@ int NetworkInterface::Step() {
 		{
 			EjectReqMsg* req = (EjectReqMsg*) msg;
 			EjectResMsg res;
-			
+  			Application* app = reinterpret_cast<Application*>(gSim->getApplication());
+
+			u32 numLeft = app->remainingMessages();
+			if (numLeft > 0) {
+				Message *next = app->dequeueMessage();
+				InjectReqMsg* data = next->getData();
+				res.source = next->getSourceId();
+				res.dest = next->getDestinationId();
+				res.id = data->id;
+				res.packetSize = data->packetSize;
+				res.network = data->network;
+				res.cl = data->cl;
+				res.miss_pred = data->miss_pred;
+				res.remainingRequests = numLeft - 1;
+			}
 			//Take packets that have arrived at their destination (according to your
-			//network simulator) and send them back by populating res with response 
-			//information. Don't forget to set res.remainingRequests to a number 
+			//network simulator) and send them back by populating res with response
+			//information. Don't forget to set res.remainingRequests to a number
 			//greater than 0 until no more packets remain for this cycle.
 
 			*m_channel << res;

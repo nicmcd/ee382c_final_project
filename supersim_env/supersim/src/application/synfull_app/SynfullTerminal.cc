@@ -23,7 +23,7 @@
 #include "types/Packet.h"
 #include "types/Flit.h"
 #include "application/synfull_app/Application.h"
-
+#include "application/synfull_app/MsgTime.h"
 namespace Synfull_App {
 
 SynfullTerminal::SynfullTerminal(
@@ -54,14 +54,14 @@ void SynfullTerminal::handleMessage(Message* _message) {
 }
 
 void SynfullTerminal::sendSynfullPacket(InjectMsgReq* msg) {
-  u32 messageLength = msg->size + 4;
+  u32 messageLength = msg->packetSize;
   u32 numPackets = messageLength / maxPacketSize_;
   if ((messageLength % maxPacketSize_) > 0) {
     numPackets++;
   }
-
+  MsgTime* msgtime = new MsgTime(msg, gSim->getTime());
   // create the message object
-  Message* message = new Message(numPackets, msg);
+  Message* message = new Message(numPackets, msgtime);
   message->setTransaction(createTransaction());
 
   // create the packets

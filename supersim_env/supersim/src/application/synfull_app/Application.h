@@ -42,7 +42,8 @@ class Application : public ::Application {
   void processEvent(void* _event, s32 _type) override;
   f64 percentComplete() const override;
   void enqueueMessage(Message* message);
-
+  Message* dequeueMessage();
+  u32 remainingMessages();
 
  private:
   u32 numVcs_;

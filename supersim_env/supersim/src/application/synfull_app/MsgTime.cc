@@ -1,13 +1,17 @@
+#ifndef MSG_TIME_CC
+#define MSG_TIME_CC
 
+#include "application/synfull_app/MsgTime.h"
 
 namespace Synfull_App {
 
-	MsgTime::MsgTime(InjectReqMsg msg, u64 time) : _msg(msg), _time(time) {
-
+	MsgTime::MsgTime(InjectReqMsg* msg, u64 time) {
+		_msg = msg;
+		_time = time;
 	}
 	MsgTime::~MsgTime() {}
 
-	InjectReqMsg MsgTime::getMsg() {
+	InjectReqMsg* MsgTime::getMsg() {
 		return _msg;
 	}
 
@@ -15,3 +19,5 @@ namespace Synfull_App {
 		return _time;
 	}
 }
+
+#endif

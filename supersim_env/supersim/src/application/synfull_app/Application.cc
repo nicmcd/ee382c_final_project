@@ -23,8 +23,7 @@
 #include "event/Simulator.h"
 #include "network/Network.h"
 
-// TODO(rprabala): make this the correct path
-#include "../../SynFull/NetworkInterface.h"
+#include "Synfull/src/NetworkInterface.h"
 
 #define ISPOW2INT(X) (((X) != 0) && !((X) & ((X) - 1)))  /*glibc trick*/
 #define ISPOW2(X) (ISPOW2INT(X) == 0 ? false : true)
@@ -85,22 +84,23 @@ f64 Application::percentComplete() const {
 }
 
 void Application::enqueueMessage(Message *message) {
-  finished_.push(message);
+  finished_->push(message);
 }
 
 Message* Application::dequeueMessage() {
-  return finished_.pop();
+  Message* current = finished_->front();
+  finished_->pop();
+  return current;
 }
 
 u32 Application::remainingMessages() {
-  return finished_.size();
+  return finished_->size();
 }
-
 void Application::processEvent(void* _event, s32 _type) {
   dbgprintf("synfull_app application starting\n");
-  bool done = NetworkInterface::Step();
+  bool done = gSim->ni.Step();
   if (!done)
-    addEvent(gSim->FutureCycle(1), 0, nullptr, 0);
+    addEvent(gSim->futureCycle(1), 0, nullptr, 0);
   else
     gSim->endMonitoring();
 }

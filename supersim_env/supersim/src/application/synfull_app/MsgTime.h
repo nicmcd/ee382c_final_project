@@ -9,13 +9,13 @@ namespace Synfull_App {
 	class MsgTime
 	{
 	public:
-		MsgTime();
+		MsgTime(InjectReqMsg* msg, u64 time);
 		~MsgTime();
-		InjectReqMsg getMsg();
+		InjectReqMsg* getMsg();
 		u64 getTime();
 
 	private:
-		InjectReqMsg _msg;
+		InjectReqMsg* _msg;
 		u64 _time;
 
 	};

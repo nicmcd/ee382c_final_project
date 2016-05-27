@@ -19,6 +19,7 @@
 #include <json/json.h>
 #include <prim/prim.h>
 #include <rnd/Random.h>
+#include "Synfull/src/NetworkInterface.h"
 
 class Component;
 class Network;
@@ -54,7 +55,7 @@ class Simulator {
   void endMonitoring();
 
   rnd::Random rnd;
-
+  NetworkInterface ni;
  protected:
   u64 time_;
   u8 epsilon_;

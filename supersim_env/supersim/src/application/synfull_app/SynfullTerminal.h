@@ -25,7 +25,7 @@
 
 #include "event/Component.h"
 #include "application/Terminal.h"
-#include "../../Synfull/src/netstream/messages.h"
+#include "Synfull/src/netstream/messages.h"
 
 class Application;
 
@@ -41,7 +41,7 @@ class SynfullTerminal : public Terminal {
   void handleMessage(Message* _message) override;
   void messageEnteredInterface(Message* _message) override;
   void messageExitedNetwork(Message* _message) override;
-  void sendSynfullPacket(InjectMsgReq* msg);
+  void sendSynfullPacket(InjectReqMsg* msg);
 
  private:
   enum class eState {kWaiting, kAccessing};
@@ -49,7 +49,9 @@ class SynfullTerminal : public Terminal {
   void addLatency();
 
   u32 latency_;
-
+  u32 minMessageSize_;
+  u32 maxMessageSize_;
+  u32 maxPacketSize_;
   std::queue<Message*> messages_;
   eState fsm_;
 };

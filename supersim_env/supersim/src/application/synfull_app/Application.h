@@ -50,7 +50,7 @@ class Application : public ::Application {
   u32 bytesPerFlit_;
   u32 headerOverhead_;
   u32 maxPacketSize_;
-  std::queue<Message*> finished_;
+  std::queue<Message*>* finished_;
 };
 
 }  // namespace Synfull_App

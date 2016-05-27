@@ -33,6 +33,10 @@ SynfullTerminal::SynfullTerminal(
     : ::Terminal(_name, _parent, _id, _address, _app),
       fsm_(eState::kWaiting) {
   latency_ = _settings["latency"].asUInt();
+  minMessageSize_ = _settings["min_message_size"].asUInt();
+  maxMessageSize_ = _settings["max_message_size"].asUInt();
+  maxPacketSize_  = _settings["max_packet_size"].asUInt();
+
 }
 
 SynfullTerminal::~SynfullTerminal() {
@@ -53,13 +57,13 @@ void SynfullTerminal::handleMessage(Message* _message) {
   //  startMemoryAccess();
 }
 
-void SynfullTerminal::sendSynfullPacket(InjectMsgReq* msg) {
+void SynfullTerminal::sendSynfullPacket(InjectReqMsg* msg) {
   u32 messageLength = msg->packetSize;
   u32 numPackets = messageLength / maxPacketSize_;
   if ((messageLength % maxPacketSize_) > 0) {
     numPackets++;
   }
-  MsgTime* msgtime = new MsgTime(msg, gSim->getTime());
+  MsgTime* msgtime = new MsgTime(msg, gSim->time());
   // create the message object
   Message* message = new Message(numPackets, msgtime);
   message->setTransaction(createTransaction());

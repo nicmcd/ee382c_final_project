@@ -12,7 +12,11 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 */
 #include "NetworkInterface.h"
 #include <sstream>
-#include "event/simulator.h"
+#include "event/Simulator.h"
+#include "application/Application.h"
+#include "application/synfull_app/SynfullTerminal.h"
+#include "application/synfull_app/Application.h"
+#include "application/synfull_app/MsgTime.h"
 /**
  * Establish this as a server over a socket and wait for the client (TrafficManager)
  * to connect.
@@ -69,8 +73,8 @@ int NetworkInterface::Step() {
 			InjectReqMsg* req = (InjectReqMsg*) msg;
 
 			//Inject the packet into your network simulator here.
-  			Application* app = reinterpret_cast<Application*>(gSim->getApplication());
-  			SynfullTerminal *term = reinterpret_cast<SynfullTerminal*>(app->getTerminal(req->source));
+  			Synfull_App::Application* app = reinterpret_cast<Synfull_App::Application*>(gSim->getApplication());
+  			Synfull_App::SynfullTerminal *term = reinterpret_cast<Synfull_App::SynfullTerminal*>(app->getTerminal(req->source));
   			term->sendSynfullPacket(req);
 			// acknowledge receipt of packet to TrafficManager
 			InjectResMsg res;
@@ -82,12 +86,13 @@ int NetworkInterface::Step() {
 		{
 			EjectReqMsg* req = (EjectReqMsg*) msg;
 			EjectResMsg res;
-  			Application* app = reinterpret_cast<Application*>(gSim->getApplication());
+  			Synfull_App::Application* app = reinterpret_cast<Synfull_App::Application*>(gSim->getApplication());
 
 			u32 numLeft = app->remainingMessages();
 			if (numLeft > 0) {
 				Message *next = app->dequeueMessage();
-				InjectReqMsg* data = next->getData();
+				Synfull_App::MsgTime* data_ = (Synfull_App::MsgTime*)next->getData();
+				InjectReqMsg* data = data_->getMsg();
 				res.source = next->getSourceId();
 				res.dest = next->getDestinationId();
 				res.id = data->id;

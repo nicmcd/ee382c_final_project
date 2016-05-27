@@ -32,6 +32,9 @@
 #include "metadata/MetadataHandlerFactory.h"
 #include "network/Network.h"
 #include "network/NetworkFactory.h"
+#include "Synfull/src/NetworkInterface.h"
+
+
 
 s32 main(s32 _argc, char** _argv) {
   // turn off buffered output on stdout and stderr
@@ -88,6 +91,7 @@ s32 main(s32 _argc, char** _argv) {
 
   // run the simulation!
   printf("Simulation beginning\n");
+  gSim->ni.Init();
   gSim->simulate();
   printf("Simulation complete\n");
 

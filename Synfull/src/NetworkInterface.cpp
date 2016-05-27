@@ -13,6 +13,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #include "NetworkInterface.h"
 #include <sstream>
 #include "event/simulator.h"
+#include "application/Application.h"
+#include "application/synfull_app/SynfullTerminal.h"
 /**
  * Establish this as a server over a socket and wait for the client (TrafficManager)
  * to connect.

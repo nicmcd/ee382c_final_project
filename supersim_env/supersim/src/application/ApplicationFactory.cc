@@ -21,6 +21,7 @@
 #include "application/stresstest/Application.h"
 #include "application/simplemem/Application.h"
 #include "application/singlestream/Application.h"
+#include "application/synfull_app/Application.h"
 
 Application* ApplicationFactory::createApplication(
     const std::string& _name, const Component* _parent,
@@ -34,6 +35,9 @@ Application* ApplicationFactory::createApplication(
                                       _settings);
   } else if (type == "single_stream") {
     return new SingleStream::Application(_name, _parent, _metadataHandler,
+                                         _settings);
+  } else if (type == "synfull_app") {
+    return new Synfull_App::Application(_name, _parent, _metadataHandler,
                                          _settings);
   } else {
     fprintf(stderr, "unknown application type: %s\n", type.c_str());

@@ -14,7 +14,8 @@ HEADER_DIRS   := \
 	$(LIBS_LOC)libbits/inc \
 	$(LIBS_LOC)libjson/inc \
 	$(LIBS_LOC)libsettings/inc \
-	$(LIBS_LOC)libstrop/inc
+	$(LIBS_LOC)libstrop/inc \
+	~/ee382c_project/ee382c_final_project/SynFull/src
 STATIC_LIBS   := \
 	$(LIBS_LOC)libprim/bld/libprim.a \
 	$(LIBS_LOC)librnd/bld/librnd.a \
@@ -25,7 +26,7 @@ STATIC_LIBS   := \
 	$(LIBS_LOC)libstrop/bld/libstrop.a
 
 #--------------------- Cpp Lint -----------------------------------------------#
-LINT          := ../makeccpp/cpplint/cpplint.py
+# LINT          := ../makeccpp/cpplint/cpplint.py
 LINT_FLAGS    :=
 
 #--------------------- Unit Tests ---------------------------------------------#
@@ -34,7 +35,7 @@ GTEST_BASE    := ../makeccpp/gtest
 
 #--------------------- Compilation and Linking --------------------------------#
 CXX           := g++
-SRC_EXTS      := .cc
+SRC_EXTS      := .cc 
 HDR_EXTS      := .h .tcc
 CXX_FLAGS     := -Wall -Wextra -pedantic -Wfatal-errors -std=c++11
 CXX_FLAGS     += -Wno-unused-parameter -Wno-variadic-macros

@@ -99,6 +99,7 @@ u32 Application::remainingMessages() {
 void Application::processEvent(void* _event, s32 _type) {
   dbgprintf("synfull_app application starting\n");
   bool done = gSim->ni.Step();
+  std::cout << "called step \n";
   if (!done)
     addEvent(gSim->futureCycle(1), 0, nullptr, 0);
   else

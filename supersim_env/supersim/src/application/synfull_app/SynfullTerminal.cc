@@ -33,9 +33,7 @@ SynfullTerminal::SynfullTerminal(
     : ::Terminal(_name, _parent, _id, _address, _app),
       fsm_(eState::kWaiting) {
   latency_ = _settings["latency"].asUInt();
-  minMessageSize_ = _settings["min_message_size"].asUInt();
-  maxMessageSize_ = _settings["max_message_size"].asUInt();
-  maxPacketSize_  = 16;
+    maxPacketSize_  = 16;
 
 }
 
@@ -49,17 +47,17 @@ void SynfullTerminal::processEvent(void* _event, s32 _type) {
 void SynfullTerminal::handleMessage(Message* _message) {
   dbgprintf("received message");
   // log the message
+  endTransaction(_message->getTransaction());
   Application* app = reinterpret_cast<Application*>(gSim->getApplication());
   app->getMessageLog()->logMessage(_message);
-  MsgTime* data = (MsgTime*) _message->getData();
-  std::cout << "received: " << data->getMsg()->id << std::endl;
+  MsgTime* data = reinterpret_cast<MsgTime*>(_message->getData());
+  std::cout << "received: " << (data)->getMsg()->id << std::endl;
   app->enqueueMessage(_message);
   // optional: add latency here
   //  startMemoryAccess();
 }
 
 void SynfullTerminal::sendSynfullPacket(InjectReqMsg* msg) {
-  std::cout << "sending message: " << msg->id << std::endl;
   u32 messageLength = msg->packetSize;
   u32 numPackets = messageLength / maxPacketSize_;
   if ((messageLength % maxPacketSize_) > 0) {
@@ -70,6 +68,7 @@ void SynfullTerminal::sendSynfullPacket(InjectReqMsg* msg) {
   Message* message = new Message(numPackets, msgtime);
   message->setTransaction(createTransaction());
 
+  std::cout << "sending message: " << ((MsgTime*)message->getData())->getMsg()->id << std::endl;
   // create the packets
   u32 flitsLeft = messageLength;
   for (u32 p = 0; p < numPackets; p++) {

@@ -49,8 +49,7 @@ class SynfullTerminal : public Terminal {
   void addLatency();
 
   u32 latency_;
-  u32 minMessageSize_;
-  u32 maxMessageSize_;
+
   u32 maxPacketSize_;
   std::queue<Message*> messages_;
   eState fsm_;

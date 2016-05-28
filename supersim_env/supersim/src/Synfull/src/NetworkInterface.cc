@@ -71,7 +71,7 @@ int NetworkInterface::Step() {
 		{
 			//Cast the message into the packet to be injected
 			InjectReqMsg* req = (InjectReqMsg*) msg;
-
+			// std::cout << "inject: " << req->id << std::endl;
 			//Inject the packet into your network simulator here.
   			Synfull_App::Application* app = reinterpret_cast<Synfull_App::Application*>(gSim->getApplication());
   			Synfull_App::SynfullTerminal *term = reinterpret_cast<Synfull_App::SynfullTerminal*>(app->getTerminal(req->source));
@@ -87,8 +87,8 @@ int NetworkInterface::Step() {
 			EjectReqMsg* req = (EjectReqMsg*) msg;
 			EjectResMsg res;
   			Synfull_App::Application* app = reinterpret_cast<Synfull_App::Application*>(gSim->getApplication());
-
 			u32 numLeft = app->remainingMessages();
+  			// std::cout << "in queue: " << numLeft << std::endl;
 			if (numLeft > 0) {
 				Message *next = app->dequeueMessage();
 				Synfull_App::MsgTime* data_ = (Synfull_App::MsgTime*)next->getData();
@@ -101,7 +101,18 @@ int NetworkInterface::Step() {
 				res.cl = data->cl;
 				res.miss_pred = data->miss_pred;
 				res.remainingRequests = numLeft - 1;
+			} else {
+				res.id = -1;
+				res.remainingRequests = 0;
+				res.source = 0;
+				res.dest = 0;
+				res.packetSize = 0;
+				res.network = 0;
+				res.cl = 0;
+				res.miss_pred = 0;
 			}
+			// std::cout << "eject: " << res.id << std::endl;
+			// std::cout << "num remaining: " << res.remainingRequests << std::endl;
 			//Take packets that have arrived at their destination (according to your
 			//network simulator) and send them back by populating res with response
 			//information. Don't forget to set res.remainingRequests to a number

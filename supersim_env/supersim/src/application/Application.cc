@@ -101,6 +101,9 @@ void Application::endTransaction(u64 _trans) {
 
 
 u64 Application::cyclesToSend(u32 _numFlits) const {
+  if (maxInjectionRate_ < 0)
+    return 1;
+
   if (std::isinf(maxInjectionRate_)) {
     return 0;  // infinite injection rate
   }

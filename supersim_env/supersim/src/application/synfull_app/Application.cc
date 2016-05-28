@@ -57,7 +57,7 @@ Application::Application(const std::string& _name, const Component* _parent,
   finished_ = new std::queue<Message*>();
   // this application always wants monitor
   addEvent(0, 0, nullptr, 0);
-  gSim->startMonitoring();
+  // gSim->startMonitoring();
 }
 
 Application::~Application() {}
@@ -80,7 +80,7 @@ u32 Application::maxPacketSize() const {
 }
 
 f64 Application::percentComplete() const {
-  return 0.5;
+  return 0.1;
 }
 
 void Application::enqueueMessage(Message *message) {
@@ -96,10 +96,15 @@ Message* Application::dequeueMessage() {
 u32 Application::remainingMessages() {
   return finished_->size();
 }
+static bool should_monitor = true;
 void Application::processEvent(void* _event, s32 _type) {
   dbgprintf("synfull_app application starting\n");
+  if (should_monitor) {
+    gSim->startMonitoring();
+    should_monitor = false;
+  }
+  // std::cout << "Entering NI.Step()" << std::endl;
   bool done = gSim->ni.Step();
-  std::cout << "called step \n";
   if (!done)
     addEvent(gSim->futureCycle(1), 0, nullptr, 0);
   else

@@ -13,8 +13,10 @@ def main():
     global clib_list
     global rtr_list
 
+    print rtr_list
     synthesize("c", clib_list)
     synthesize("r", rtr_list)
+
     return
 
 

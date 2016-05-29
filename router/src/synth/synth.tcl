@@ -8,7 +8,7 @@ set target_library osu05_stdcells.db
 set link_library   osu05_stdcells.db
 
 # Grabbing clib source files
-set src_list [list parameters.v router_wrap.v rtr_alloc_mac.v rtr_channel_input.v rtr_channel_output.v rtr_constants.v rtr_crossbar_mac.v rtr_fc_state.v rtr_flags_mux.v rtr_flit_buffer.v rtr_flit_type_check.v rtr_flow_ctrl_input.v rtr_flow_ctrl_output.v rtr_ip_ctrl_mac.v rtr_next_hop_addr.v rtr_op_ctrl_mac.v rtr_route_filter.v rtr_routing_logic.v rtr_top.v vcr_alloc_mac.v vcr_constants.v vcr_ip_ctrl_mac.v vcr_ivc_ctrl.v vcr_op_ctrl_mac.v vcr_ovc_ctrl.v vcr_sw_alloc_sep_if.v vcr_sw_alloc_sep_of.v vcr_sw_alloc_wf.v vcr_top.v vcr_vc_alloc_sep_if.v vcr_vc_alloc_sep_of.v vcr_vc_alloc_wf.v whr_alloc_mac.v whr_constants.v whr_ip_ctrl_mac.v whr_op_ctrl_mac.v whr_top.v parameters.v_bak]
+set src_list [list router_wrap.v]
 
 # Iterating over each file
 foreach path $src_list {

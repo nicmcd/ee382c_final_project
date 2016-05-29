@@ -1,4 +1,5 @@
 import os
+import sys
 
 # Set filepaths
 synth_script = "./synth.tcl"
@@ -14,8 +15,11 @@ def main():
     global clib_list
     global rtr_list
 
-    synthesize("c", clib_list)
-    synthesize("r", rtr_list)
+    if len(sys.argv) > 1:
+        synthesize("x", sys.argv[1:])
+    else:
+        synthesize("c", clib_list)
+        synthesize("r", rtr_list)
 
     return
 
@@ -34,7 +38,7 @@ def synthesize(prefix, src_list):
             synth_list.append(name)
     
     # If no files to synthesize, then exit
-    if synth_list.len == 0:
+    if len(synth_list) == 0:
         return
 
     # Iterating over c_lib files first

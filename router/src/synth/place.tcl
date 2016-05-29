@@ -15,7 +15,7 @@ set tf_name tech.tf
 set tf_lib  $tf_path$tf_name
 
 # Grabbing source files
-set src_list [list router_wrap.out.synth.v rtr_top.out.synth.v vcr_top.out.synth.v whr_top.out.synth.v]
+set src_list [list router_wrap.out.place.v rtr_top.out.place.v vcr_top.out.place.v whr_top.out.place.v router_wrap.out.place.v]
 
 create_mw_lib -technology $tf_lib -mw_reference_library {../../lib/synopsys/lib/ami05/osu05_stdcells} "router_lib"
 open_mw_lib "router_lib"

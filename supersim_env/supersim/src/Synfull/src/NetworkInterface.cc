@@ -101,6 +101,7 @@ int NetworkInterface::Step() {
 				res.cl = data->cl;
 				res.miss_pred = data->miss_pred;
 				res.remainingRequests = numLeft - 1;
+				StreamMessage::destroy(data);
 			} else {
 				res.id = -1;
 				res.remainingRequests = 0;
@@ -138,7 +139,7 @@ int NetworkInterface::Step() {
 		} // end switch
 
 		// done processing message, destroy it
-		StreamMessage::destroy(msg);
+		// StreamMessage::destroy(msg);
 	}
 
 	return 0;

@@ -51,7 +51,6 @@ void SynfullTerminal::handleMessage(Message* _message) {
   Application* app = reinterpret_cast<Application*>(gSim->getApplication());
   app->getMessageLog()->logMessage(_message);
   MsgTime* data = reinterpret_cast<MsgTime*>(_message->getData());
-  std::cout << "received: " << (data)->getMsg()->id << std::endl;
   app->enqueueMessage(_message);
   // optional: add latency here
   //  startMemoryAccess();
@@ -68,7 +67,6 @@ void SynfullTerminal::sendSynfullPacket(InjectReqMsg* msg) {
   Message* message = new Message(numPackets, msgtime);
   message->setTransaction(createTransaction());
 
-  std::cout << "sending message: " << ((MsgTime*)message->getData())->getMsg()->id << std::endl;
   // create the packets
   u32 flitsLeft = messageLength;
   for (u32 p = 0; p < numPackets; p++) {

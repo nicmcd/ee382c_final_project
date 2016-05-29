@@ -18,6 +18,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
  */
 
 #include <iostream>
+#include <fstream>
 #include <list>
 #include <math.h>
 
@@ -50,6 +51,8 @@ int lastHState = 1;
 
 int messageId = 0;
 
+static std::ofstream output_file;
+
 //Steady state
 map<int, map<int, int> > steadyState;
 map<int, int> hSteadyState;
@@ -63,13 +66,20 @@ struct transaction_t {
 	int acks_received;
 	bool data_received;
 	bool unblock_received;
+	unsigned int total_time;
 
 	bool Completed() {
-		return (invs_sent == acks_received) && data_received && unblock_received;
+		if ((invs_sent == acks_received) && data_received && unblock_received) {
+			output_file << total_time << std::endl;
+			output_file.flush();
+			return true;
+		}
+		else
+			return false;
 	}
 
 	transaction_t() : source(-1), dest(-1), invs_sent(0), acks_received(0),
-			data_received(false), unblock_received(false) {}
+			data_received(false), unblock_received(false), total_time(0) {}
 };
 
 map<int, InjectReqMsg> inTransitPackets;
@@ -128,7 +138,7 @@ void sendPacket(InjectReqMsg& req) {
 	messageId++;
 
 	inTransitPackets[req.id] = req;
-	//printPacket(req);
+	// printPacket(req);
 
 #if CONNECT
 	InjectResMsg res;
@@ -279,6 +289,8 @@ void react(EjectResMsg ePacket) {
 
 	map<int, transaction_t>::iterator trans = inTransitTransactions.find(request.address);
 
+	trans->second.total_time += ePacket.elapsed;
+
 	if(request.msgType == REQUEST &&
 			(request.coType == WRITE || request.coType == READ)) {
 		//Handle Read/Write Requests
@@ -410,7 +422,7 @@ void Run(unsigned int numCycles, bool ssExit) {
 
 	//Connect to network simulator
 	connect();
-
+	output_file.open("transaction_log.log");
 	//Iterate through each cycle and inject packets
 	for(cycle = 0; cycle < numCycles; ++cycle) {
 		if(cycle >= next_hinterval) {
@@ -463,5 +475,6 @@ void Run(unsigned int numCycles, bool ssExit) {
 	}
 
 	//Close the connection
+	output_file.close();
 	exit();
 }

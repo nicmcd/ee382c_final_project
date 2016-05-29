@@ -1,17 +1,14 @@
 # Setting target libraries / paths
-set lib_path  ../../lib/front_end/timing_power_noise/ECSM/
-# set lib_path ../../lib/synopsys/lib/ami05/
+set lib_path ../../lib/synopsys/lib/ami05/
 set clib_path ../clib/
 set rtr_path  ../
 set search_path [concat $search_path $clib_path $rtr_path $lib_path]
 
-# set target_library osu05_stdcells.db
-# set link_library osu05_stdcells.db
-set target_library NanGate_15nm_OCL_typical_conditional_ecsm.db
-set link_library   NanGate_15nm_OCL_typical_conditional_ecsm.db
+set target_library osu05_stdcells.db
+set link_library   osu05_stdcells.db
 
 # Grabbing clib source files
-set src_list [list c_align.v]
+set src_list [list parameters.v router_wrap.v rtr_alloc_mac.v rtr_channel_input.v rtr_channel_output.v rtr_constants.v rtr_crossbar_mac.v rtr_fc_state.v rtr_flags_mux.v rtr_flit_buffer.v rtr_flit_type_check.v rtr_flow_ctrl_input.v rtr_flow_ctrl_output.v rtr_ip_ctrl_mac.v rtr_next_hop_addr.v rtr_op_ctrl_mac.v rtr_route_filter.v rtr_routing_logic.v rtr_top.v vcr_alloc_mac.v vcr_constants.v vcr_ip_ctrl_mac.v vcr_ivc_ctrl.v vcr_op_ctrl_mac.v vcr_ovc_ctrl.v vcr_sw_alloc_sep_if.v vcr_sw_alloc_sep_of.v vcr_sw_alloc_wf.v vcr_top.v vcr_vc_alloc_sep_if.v vcr_vc_alloc_sep_of.v vcr_vc_alloc_wf.v whr_alloc_mac.v whr_constants.v whr_ip_ctrl_mac.v whr_op_ctrl_mac.v whr_top.v parameters.v_bak]
 
 # Iterating over each file
 foreach path $src_list {
@@ -33,21 +30,15 @@ foreach path $src_list {
   write_sdc -nosplit [join [list $design_name ".out.synth.sdc"] ""]
 
   if {[string match *top* $design_name]} {
-    puts "=================================================="
-    puts [concat "TOP MODULE REPORTS: " $design_name]
-    puts "=================================================="
-    report_timing -nosplit
-    report_area   -nosplit
-    report_power  -nosplit
+    report_timing -nosplit > [join [list $design_name ".rpt.synth.timing"] ""]
+    report_area   -nosplit > [join [list $design_name ".rpt.synth.area"] ""]
+    report_power  -nosplit > [join [list $design_name ".rpt.synth.power"] ""]
   }
 
   if {[string match *wrap* $design_name]} {
-    puts "=================================================="
-    puts [concat "WRAPPER MODULE REPORTS: " $design_name]
-    puts "=================================================="
-    report_timing -nosplit
-    report_area   -nosplit
-    report_power  -nosplit
+    report_timing -nosplit > [join [list $design_name ".rpt.synth.timing"] ""]
+    report_area   -nosplit > [join [list $design_name ".rpt.synth.area"] ""]
+    report_power  -nosplit > [join [list $design_name ".rpt.synth.power"] ""]
   }
 }
 

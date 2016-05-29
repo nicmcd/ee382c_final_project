@@ -15,7 +15,7 @@ set tf_name tech.tf
 set tf_lib  $tf_path$tf_name
 
 # Grabbing source files
-set src_list [list c_dff.mapped.v]
+set src_list [list router_wrap.out.synth.v rtr_top.out.synth.v vcr_top.out.synth.v whr_top.out.synth.v]
 
 create_mw_lib -technology $tf_lib -mw_reference_library {../../lib/synopsys/lib/ami05/osu05_stdcells} "router_lib"
 open_mw_lib "router_lib"
@@ -37,14 +37,24 @@ foreach path $src_list {
     -row_core_ratio    "1"
 
   create_fp_placement
-#  clock_opt
 
-  route_opt
+  route_opt -effort low
 
   change_names -rule verilog -hierarchy
   write_verilog [join [list $design_name ".out.place.v"  ] ""] 
   write_sdc     [join [list $design_name ".out.place.sdc"] ""] 
 
+  if {[string match *top* $design_name]} {
+    report_timing -nosplit > [join [list $design_name ".rpt.place.timing"] ""]
+    report_area   -nosplit > [join [list $design_name ".rpt.place.area"] ""]
+    report_power  -nosplit > [join [list $design_name ".rpt.place.power"] ""]
+  }
+
+  if {[string match *wrap* $design_name]} {
+    report_timing -nosplit > [join [list $design_name ".rpt.place.timing"] ""]
+    report_area   -nosplit > [join [list $design_name ".rpt.place.area"] ""]
+    report_power  -nosplit > [join [list $design_name ".rpt.place.power"] ""]
+  }
 }
 
 exit

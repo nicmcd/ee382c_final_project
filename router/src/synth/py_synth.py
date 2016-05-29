@@ -2,6 +2,7 @@ import os
 
 # Set filepaths
 synth_script = "./synth.tcl"
+synth_path   = "."
 rtr_path     = ".."
 clib_path    = "../clib"
 
@@ -13,7 +14,6 @@ def main():
     global clib_list
     global rtr_list
 
-    print rtr_list
     synthesize("c", clib_list)
     synthesize("r", rtr_list)
 
@@ -22,12 +22,28 @@ def main():
 
 def synthesize(prefix, src_list):
     global synth_script
+    synth_list = []
+
+    for src in src_list:
+        name = "".join((src.split(".")[0], ".out.synth.v"))
+        # If top-level module, then synthesize
+        if ("wrap" in name) or ("top" in name):
+            synth_list.append(name)
+        # If not already synthesized, then synthesize
+        elif name not in os.listdir(synth_path):
+            synth_list.append(name)
+    
+    # If no files to synthesize, then exit
+    if synth_list.len == 0:
+        return
 
     # Iterating over c_lib files first
     count = 0
-    while len(src_list) > 0 and count < 3:
+    while len(synth_list) > 0 and count < 3:
         
         error_list = []
+
+        # Deleting old logfiles
         out_name = "out_" + prefix + "_" + str(count)
         if os.path.isfile(out_name):
             cmd = "rm -rf " + out_name
@@ -44,7 +60,7 @@ def synthesize(prefix, src_list):
                 if "set src_list" not in lines[i]:
                     continue
 
-                lines[i] = "set src_list [list " + " ".join(src_list) + "]"
+                lines[i] = "set src_list [list " + " ".join(synth_list) + "]"
             
             sp_file.close()
 
@@ -77,7 +93,7 @@ def synthesize(prefix, src_list):
 
             out_file.close()
         
-        src_list = error_list
+        synth_list = error_list
         count = count + 1
     return
 

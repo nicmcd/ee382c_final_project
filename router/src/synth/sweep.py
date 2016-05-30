@@ -3,10 +3,9 @@ import sys
 
 # Set filepaths
 param_file   = "../parameters.v"
-sweep_var = {
-  "topology"  : ["`TOPOLOGY_MESH"],
-  "num_nodes" : [64, 100]
-}
+sweep_var = {}
+# sweep_var["num_nodes"] = [32]
+sweep_var["num_dimensions"] = [3]
 
 def main():
   global sweep_var
@@ -16,12 +15,6 @@ def main():
   if len(sys.argv) > 1:
       src_list = sys.argv[1:]
 
-  # Delete previous log file
-  cmd = "rm -rf out_synth*"
-  os.system(cmd)
-  cmd = "rm -rf out_place*"
-  os.system(cmd)
-  
   # Sweep through each value
   for (parameter, values) in sweep_var.iteritems():
     for value in values:

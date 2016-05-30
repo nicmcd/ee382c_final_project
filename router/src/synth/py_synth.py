@@ -32,10 +32,10 @@ def synthesize(prefix, src_list):
         name = "".join((src.split(".")[0], ".out.synth.v"))
         # If top-level module, then synthesize
         if ("wrap" in name) or ("top" in name):
-            synth_list.append(name)
+            synth_list.append(src)
         # If not already synthesized, then synthesize
         elif name not in os.listdir(synth_path):
-            synth_list.append(name)
+            synth_list.append(src)
     
     # If no files to synthesize, then exit
     if len(synth_list) == 0:
@@ -46,6 +46,7 @@ def synthesize(prefix, src_list):
     while len(synth_list) > 0 and count < 3:
         
         error_list = []
+        print "INFO: Running iteration " + str(count+1)
 
         # Deleting old logfiles
         out_name = "out_" + prefix + "_" + str(count)
@@ -74,9 +75,10 @@ def synthesize(prefix, src_list):
             sp_file.write(text)
             sp_file.close()
 
-            # Running dc_shell-t
-            cmd = "dc_shell-t -f " + synth_script + " > " + out_name
-            os.system(cmd)
+        print "INFO: Synthesizing designs: " + " ".join(synth_list)
+        # Running dc_shell-t
+        cmd = "dc_shell-t -f " + synth_script + " > " + out_name
+        os.system(cmd)
 
         # If output has error, add to error_list
         with open(out_name, "r") as out_file:
@@ -97,6 +99,7 @@ def synthesize(prefix, src_list):
 
             out_file.close()
         
+        print "INFO: Found errors in the following designs: " + " ".join(error_list)
         synth_list = error_list
         count = count + 1
     return

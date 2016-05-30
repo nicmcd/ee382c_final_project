@@ -10,7 +10,8 @@ def main():
     if len(sys.argv) > 1:
         src_list = sys.argv[1:]
     else:
-        src_list  = [f for f in os.listdir(synth_path) if (".v" in f) and (("top" in f) or ("wrap" in f))]
+        # Place/route router_wrap only!!
+        src_list  = [f for f in os.listdir(synth_path) if (".out.synth.v" in f) and ("wrap" in f)]
 
     place_route(src_list)
 
@@ -22,19 +23,22 @@ def place_route(src_list):
 
     for src in src_list:
         name = "".join((src.split(".")[0], ".out.place.v"))
-        # If top-level module, then synthesize
-        if ("top" in name) or ("wrap" in name):
-            place_list.append(name)
-        # If not already synthesized, then synthesize
+        # If top-level module, then place/route
+        if ("wrap" in name):
+            place_list.append(src)
+        # If not already placed, then place/route
         elif name not in os.listdir(synth_path):
-            place_list.append(name)
+            place_list.append(src)
 
-    out_name = "out" + "_place"
+    print "INFO: Placing designs: " + " ".join(place_list)
+    
+    # Configuring log file (ROUTER WRAP ONLY!!)
+    out_name = "router_wrap.rpt.place"
     if os.path.isfile(out_name):
         cmd = "rm -rf " + out_name
         os.system(cmd)
     
-    # Place and Route design
+    # Inserting items to be placed
     with open(place_script, "r+") as pr_file:
     # Read text
         text = pr_file.read()
@@ -59,25 +63,6 @@ def place_route(src_list):
     cmd = "icc_shell -64bit -f " + place_script + " > " + out_name
     os.system(cmd)
 
-    # # If output has error, add to error_list
-    # with open(out_name, "r") as out_file:
-    # inst = ""
-    # # Read each line
-    # for line in out_file.readlines():
-    #     # Grab instance name
-    #     if "Current design is \'" in line:
-    #         inst = line.split("\'")[1] + ".v"
-    #     
-    #     # If instance has error, add to list
-    #     if "Warning: " in line and "unresolved references" in line:
-    #         if inst not in error_list:
-    #             error_list.append(inst)
-    #     elif "Error: " in line and "unitless" not in line:
-    #        if inst not in error_list:
-    #             error_list.append(inst)
-
-    # out_file.close()
-    
     return
 
 if __name__ == "__main__":

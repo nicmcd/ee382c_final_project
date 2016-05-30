@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (c) 2014, Mario Badr
 All rights reserved.
 
@@ -23,6 +23,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #include <map>
 #include <vector>
 #include <random>
+#include <iostream>
+#include <fstream>
 
 #include "MyRand.h"
 
@@ -50,6 +52,8 @@ extern int g_resolution;
 extern int g_hierClasses;
 extern int g_hierClass;
 extern int g_timeSpan;
+
+extern std::ofstream output_file;
 
 //Hierarchical markov chain
 extern std::map<int, DiscreteDistribution<double> > g_hierState;

@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (c) 2014, Mario Badr
 All rights reserved.
 
@@ -26,11 +26,12 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #include "TrafficGenerator.h"
 
 using namespace std;
+// std::ofstream output_file;
 
 int main(int argc, char **argv) {
-	if(argc != 4) {
+	if(argc != 5) {
 		cerr << "Need 3 parameters: model file, number of cycles, exit at "
-				"steady state" << endl;
+				"steady state, outputname" << endl;
 		return -1;
 	}
 
@@ -52,7 +53,7 @@ int main(int argc, char **argv) {
 	//Whether or not we should exit the simulation prematurely when steady
 	//state is reached
 	bool ssExit = ((int) strtoul(argv[3], NULL, 0)) == 1;
-
+	output_file.open(argv[4]);
 	//Run the traffic generator
 	Run(numCycles, ssExit);
 

@@ -51,13 +51,14 @@ int lastHState = 1;
 
 int messageId = 0;
 
-static std::ofstream output_file;
+extern std::ofstream output_file;
 
 //Steady state
 map<int, map<int, int> > steadyState;
 map<int, int> hSteadyState;
 map<int, double> acceptable_mse;
 double acceptable_hmse;
+std::ofstream output_file;
 
 struct transaction_t {
 	int source;
@@ -71,7 +72,7 @@ struct transaction_t {
 	bool Completed() {
 		if ((invs_sent == acks_received) && data_received && unblock_received) {
 			output_file << total_time << std::endl;
-			output_file.flush();
+			// output_file.flush();
 			return true;
 		}
 		else
@@ -422,7 +423,7 @@ void Run(unsigned int numCycles, bool ssExit) {
 
 	//Connect to network simulator
 	connect();
-	output_file.open("transaction_log.log");
+	// output_file.open("transaction_log.log");
 	//Iterate through each cycle and inject packets
 	for(cycle = 0; cycle < numCycles; ++cycle) {
 		if(cycle >= next_hinterval) {

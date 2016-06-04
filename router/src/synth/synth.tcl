@@ -8,7 +8,7 @@ set target_library osu05_stdcells.db
 set link_library   osu05_stdcells.db
 
 # Grabbing clib source files
-set src_list [list router_wrap.v]
+set src_list [list parameters.v router_wrap.v rtr_constants.v rtr_top.v vcr_constants.v vcr_top.v whr_constants.v whr_top.v parameters.v_bak]
 
 # Iterating over each file
 foreach path $src_list {

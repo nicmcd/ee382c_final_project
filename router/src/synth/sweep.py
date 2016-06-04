@@ -3,10 +3,9 @@ import sys
 
 # Set filepaths
 param_file   = "../parameters.v"
-sweep_var = {
-  "topology"  : ["`TOPOLOGY_MESH", "`TOPOLOGY_TORUS"],
-  "num_nodes" : [64, 81, 100]
-}
+sweep_var = {}
+# sweep_var["num_nodes"] = [32]
+sweep_var["num_dimensions"] = [3]
 
 def main():
   global sweep_var
@@ -16,32 +15,55 @@ def main():
   if len(sys.argv) > 1:
       src_list = sys.argv[1:]
 
-  # Delete previous log file
-  cmd = "rm -rf *.out_sweep"
-  os.system(cmd)
-  
   # Sweep through each value
   for (parameter, values) in sweep_var.iteritems():
     for value in values:
 
         # Set parameter to sweep value
         set_param(param_file, parameter, value)
-        
+
+        print "==================================="
+        print "Parameter: " + parameter
+        print "Value: " + str(value)
+        print "==================================="
+
         # Set output log suffix
-        log = ""
+        log_suffix = ""
         if type(value) is str:
-            log = parameter + "_" + value[1:]
+            log_suffix = parameter + "_" + value[1:]
         elif type(value) is int:
-            log = parameter + "_" + str(value)
+            log_suffix = parameter + "_" + str(value)
 
         # Run synthesis
-        cmd = "python py_synth.py " + " ".join(src_list) + " > out_synth_" + log
-        os.system(cmd)
+        synth_cmd = "python py_synth.py " + " ".join(src_list)
+        os.system(synth_cmd)
 
+        # Combining synthesis reports
+        synth_log = "out_synth_" + log_suffix
+        synth_out_list = [f for f in os.listdir("./") if ".rpt.synth" in f]
+        with open("./" + synth_log, "w") as log:
+            for synth_out in synth_out_list:
+                with open(synth_out) as out_file:
+                    for line in out_file:
+                        log.write(line)
+        
+        os.system("rm -rf *rpt.synth*")
+        
         # Run place/route
-        cmd = "python py_place.py " + " ".join(src_list) + " > out_place_" + log
-        os.system(cmd)
+        place_cmd = "python py_place.py " + " ".join(src_list)
+        os.system(place_cmd)
 
+        # Combining place/route reports
+        place_log = "out_place_" + log_suffix
+        place_out_list = [f for f in os.listdir("./") if ".rpt.place" in f]
+        with open("./" + place_log, "w") as log:
+            for place_out in place_out_list:
+                with open(place_out) as out_file:
+                    for line in out_file:
+                        log.write(line)
+
+        os.system("rm -rf *rpt.place*")
+        
   return
 
 # Set parameter to sweep value

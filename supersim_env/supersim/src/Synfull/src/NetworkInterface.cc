@@ -101,6 +101,7 @@ int NetworkInterface::Step() {
 				res.cl = data->cl;
 				res.miss_pred = data->miss_pred;
 				res.remainingRequests = numLeft - 1;
+				res.elapsed = data_->getTime();
 				StreamMessage::destroy(data);
 			} else {
 				res.id = -1;
@@ -111,6 +112,7 @@ int NetworkInterface::Step() {
 				res.network = 0;
 				res.cl = 0;
 				res.miss_pred = 0;
+				res.elapsed = 0;
 			}
 			// std::cout << "eject: " << res.id << std::endl;
 			// std::cout << "num remaining: " << res.remainingRequests << std::endl;

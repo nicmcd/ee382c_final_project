@@ -47,10 +47,12 @@ void SynfullTerminal::processEvent(void* _event, s32 _type) {
 void SynfullTerminal::handleMessage(Message* _message) {
   dbgprintf("received message");
   // log the message
+  u32 current_time = gSim->time();
   endTransaction(_message->getTransaction());
   Application* app = reinterpret_cast<Application*>(gSim->getApplication());
   app->getMessageLog()->logMessage(_message);
   MsgTime* data = reinterpret_cast<MsgTime*>(_message->getData());
+  data->setTime(current_time - data->getTime());
   app->enqueueMessage(_message);
   // optional: add latency here
   //  startMemoryAccess();

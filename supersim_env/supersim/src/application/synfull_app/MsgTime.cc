@@ -18,6 +18,10 @@ namespace Synfull_App {
 	u64 MsgTime::getTime() {
 		return _time;
 	}
+
+	void MsgTime::setTime(u32 new_val) {
+		_time = new_val;
+	}
 }
 
 #endif

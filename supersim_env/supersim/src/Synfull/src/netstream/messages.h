@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (c) 2014, Mario Badr
 All rights reserved.
 
@@ -151,7 +151,7 @@ struct EjectResMsg: StreamMessage
 	int network;
 	int cl;
 	int miss_pred;
-
+    unsigned int elapsed;
 };
 
 struct QuitReqMsg: StreamMessage

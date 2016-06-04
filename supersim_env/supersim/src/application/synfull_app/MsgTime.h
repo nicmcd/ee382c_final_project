@@ -13,6 +13,7 @@ namespace Synfull_App {
 		~MsgTime();
 		InjectReqMsg* getMsg();
 		u64 getTime();
+		void setTime(u32 new_val);
 
 	private:
 		InjectReqMsg* _msg;
